@@ -10,5 +10,6 @@ fi
 
 export PATH="$HOME/.elan/bin:$PATH"
 lean --version
+lake exe cache get Mathlib.Tactic.Use Mathlib.Tactic.Ring
 lake build
 lake env lean InductionStarter.lean

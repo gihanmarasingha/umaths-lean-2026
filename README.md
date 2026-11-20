@@ -1,47 +1,57 @@
 # U-Maths Lean activity
 
-Can you show that 7 divides 8ⁿ − 1 for every natural number n?
+Practise three tactics on small goals, then use them to show that 7 divides 8ⁿ − 1 for
+every natural number n.
 
 ## Start here
 
-1. **[Open the starter in Lean Live Web][starter].** This route works in a browser without
-   a GitHub account. If the link does not prefill the editor, open
-   [Lean Live Web](https://live.lean-lang.org/) and paste all of
+1. **[Open the starter in Lean Live Web][starter].** No account is needed. If the link
+   does not prefill the editor, select **Stable Release** with Lean 4.36.0 and Mathlib in
+   [Lean Live Web](https://live.lean-lang.org/) and paste in
    [InductionStarter.lean](InductionStarter.lean).
 2. **[Open in GitHub Codespaces][codespaces].** Sign in to GitHub and create a codespace.
    Wait for setup, then open `InductionStarter.lean` with the Lean 4 extension.
-3. **Use the projected proof state** if you cannot access an editor. The same challenge and
-   algebra are in [the on-screen activity](ProofState.md).
+3. **[Work from the on-screen activity](ProofState.md)** if you cannot access an editor.
 
 ## Work in pairs
 
-- Try n = 0 and n = 2. The Lean statement uses `Nat` for the exponent and `Int` for the witness.
-- Move your cursor to the successor case. Lean's **InfoView** is the panel next to the editor.
-  In VS Code, run **Lean 4: Toggle InfoView** in the Command Palette if you cannot see it.
-- Explain what `obtain ⟨k, hk⟩ := ih` extracts. Swap who types and replace `(by sorry : Int)`
-  with your proposed integer expression, keeping the brackets `⟨… , ?_⟩`.
-- Use one equality from the context to replace the next `sorry` with a rewrite. Remove
-  `first | … | sorry` on the final line by leaving only `omega`. A finished proof has no
-  errors or `sorry` warnings. Explain where the extra 1 in the witness comes from.
-- Reopen the original starter link to reset in Lean Live Web. In Codespaces, copy the original
-  file contents back from the repository.
+Put the cursor just before a `sorry` to see the goal it stands in for. The **InfoView** is
+the panel next to the editor. In VS Code, you can open it with **Lean 4: Toggle InfoView**.
+Lean may display `Nat` as ℕ and `Int` as ℤ. After an edit, check for remaining goals or
+errors before moving on.
 
-[Hint](Hint.md) · [Solution source](InductionSolution.lean) ·
+1. **Witness.** Follow the worked `use 3` example. Replace the first `sorry` with `use`
+   and the integer that makes 14 = 7 × k true. On the next line, enter `ring` to check
+   the arithmetic, as in the worked example.
+2. **Substitution.** Follow `rw [h]`. Find the equality that replaces `a` and use its name
+   inside the square brackets. Swap who types.
+3. **Algebra.** Explain the factorisation and replace the next `sorry` with `ring` to check it.
+4. **Induction.** The starter has set up the two cases, handled the base case and unpacked
+   the hypothesis. Substitute your expression for `(by sorry : Int)` after `use`. Keep
+   `rw [step n]`, which exposes the expression you saw in step 2. Replace the last `sorry`
+   with your rewrite and `ring` on separate lines. Explain where the extra 1 comes from.
+
+The starter has an intentional `sorry` warning for each unfinished exercise. A completed
+file has no warnings or errors. To reset, reopen the original browser link or restore the
+starter from this repository.
+
+[Induction hint](Hint.md) · [Solution source](InductionSolution.lean) ·
 [Checked solution in Lean Live Web][solution] ·
 [Natural Number Game](https://adam.math.hhu.de/#/g/leanprover-community/NNG4)
 
 ## Local verification
 
-Open this folder in VS Code with the Lean 4 extension and elan installed. Run the commands below
-once with internet access to provision the pinned toolchain. With the toolchain installed, the
-activity and checks work offline. The project uses Lean core alone.
+Open this folder in VS Code with the Lean 4 extension and elan. Run these commands once
+with internet access to provision Lean 4.36.0 and the two Mathlib modules and their
+dependencies. After that, the activity works offline.
 
 ```sh
+lake exe cache get Mathlib.Tactic.Use Mathlib.Tactic.Ring
 lake build
-lake env lean InductionStarter.lean  # Expected: declaration uses sorry
+lake env lean InductionStarter.lean  # Expected: four declarations use sorry
 lake env lean Warmup.lean
 ```
 
-[codespaces]: https://codespaces.new/gihanmarasingha/umaths-lean-2026
-[starter]: https://live.lean-lang.org/#project=lean-v4.36.0&codez=JYWwDg9gTgLgBAGQKYEMB2AoDB6AtLuAFQAsk4UAbAcyQCMoU5aljg0ATOGUuN9gVwDGMYBDRwAzjCRgAdHFzYMYKMABuKaV1LQkISdLBwAFOIBccAHKaAlHDMY4TkwA57cAJJoYdgHonxAGo4AEY7AhC4AF44NwAqE2M3Cy8fOH9xCLtggHZ7GNoAT0c4KAB3OABtVNlIMoB9CSFBAF0SiBAkKhQsbiRdfQkkNSQ0evY1dnqkYCpiGHq6xv5aerEyB2c4QAAiOHMrTQAaOEBgIjgAa3dU46Sr7z89hVDouDyEy7MC4qc2GCgIPYlPhCERiR5lYDcEoAHzgAC8kP9ogA%2BEpbJAADxQwjggAvyAAMxyKcHYSEEwFJgEvyGGSZqPYDEFFo5z4ULyACiGLAFBQbDgZWImm0wAkcAobDImL%2B2JgooAZv99H1eBwQaJxMRCpA%2BhIRbJmU4ILQYLzxLjzsdiOdKfleMQDQoCAAmeQAJRkPMEZGVcuAUCkkmgUEK%2FMhjPQKukNCgcExKiQEl1YL5531WycUCQvrQZFxxmJEiDIZS92OAH56tT03BBJRBA6nLcS2l%2FKY4MEwk9IjF4olkp57ulHll269bVIZIDq05WQBmN0e7He1iiwtQYOh7jkUpIMqqLT8XVoKjbzXa0i6iRp6f1F694xvC7ZMefJghtfBhtwW8xW%2BvopfjOBAAIJytIMaCMQEAQEeJ7KhCMA5omxykhQSBaD6lAULQ2KXAABrCH6FHh17TnAvr%2BvAsIdF0jCEUWGBAA
-[solution]: https://live.lean-lang.org/#project=lean-v4.36.0&codez=JYWwDg9gTgLgBAGQKYEMB2AoDB6AtLuAFQAsk4UAbAcyQCMoU5aljg0ATOGUuN9gVwDGMYBDRwAzjCRgAdHFzYMYKMABuKaV1LQkISdLBwAFOIBccAHKaAlHDMY4TkwA57cAJJoYdgHonxAGo4AEY7AhC4AF44NwAqE2M3Cy8fOH9xCLtggHZ7GNoAT0c4KAB3OABtVNlIMoB9CSFBAF0SiBAkKhQsbiRdfQkkNSQ0evY1dnqkYCpiGHq6xv5aerEyB2c4QAAiOHMrTQAaOEBgIjgAa3dU46Sr7z89hVDouDyEy7MC4qc2GCgIPYlPhCERiR5lYDcEoAHzgAC8kP9ogA%2BEpbJAADxQwjggAvyAAMxyKcHYSEEwFJgEvyGGSZqPYDEFFo5wQWgwFBsPHnY7Ec6U%2FK8YjMpxQJAAMzYZFx8QucGCIWOAH56tStk5BJRBMLnLcUvd0gE5aFws8YjLjLrPPqMk8wka8p8DDJAWrnPUXua3hdsq8BcTylVeW1XU53TEvbd3ka7Y7iR0uj0gA
+[codespaces]: https://codespaces.new/gihanmarasingha/umaths-lean-2026/tree/codex/lean-scaffolding
+[starter]: https://live.lean-lang.org/#project=mathlib-stable&codez=JYWwDg9gTgLgBAWQIYwBYBtgCMB0AVJAYxmEJwFUBnAUwChRJZEUNt8iSyAlYAOwHNatAPQBaAIRwAxHACMOOAGFUECDThI4Ad2Axe1SpW27UcAAYBXGmbijhQ0aLgAZakl5wobgCZHAwEQaRoA4BGjUXnDUAB7AlDCUgLgEOLRRSODo1HAAXHABIFlwAJK8MAA0cgCscAC8cJUAVHB5mTVYAJ60cHBWGQDMHZ58grSOcFzUYOhEGZTQUK3GaHAwWhBwmPqUCsqq6qFwfDDU%2FGELpt1loR6EqNSEANanAwJJKWkZ2QEP2UWlcgAs1TgAHY4A0vi12p0ZlA5kIxJIZAAmBQAZQsWFiugsh0eZigWhsdgcTgAgnAAGbQLRIKDeTzULRQXQZLwTKZGPbpcnwSjAbwZCDkuCmHSLXRGJn8VA8vnUF6RVITDIACkicHm32KAEo4MrTNk1TVWjrsojQXBDXAzQ0NRD%2Bvi4ABtVAAXWJcAA6qhSKZqABHCxITAwebpOLqiAWelswgZTR8Xn8uAADnNmgA1MCAPzJBVvXWaL6FbW61BFzQ1EFgk0ptNwTMgmqphrKqtwO46htZO1Q2btEQSaRwHpbG73JY3DToY5YKCaUWmPGDQn2YZOJkCODXW53DmoFBwLAQRaJgwacJ7SipDKQdCtXgQEDAIPyxXpXVqzUwGtqzNmzM9ICv61N2h6Qk8QwjAAopEbJ8BOGTkhw0AxCgwAQLwFw3FcY4PLo%2BweK47ivvmypFj8NaAS29Ttp2IE1DRypUe29ZyCaPZwNCsIDgicB%2FAoAAK2IIROXgZDAHCkByEDHKEUC2KuIwCayNLUHSQYznOCh4N6RgxCJ%2FqBsG8y8NedKxOMcAeFg1DoBAWhJGATIAG4oOJNzQNQeQWWAuoeNkAByKAmv0nTKqmX46gAen5rGyDqTiyICza6uF%2BQUXAMUeIldEgs0YH2loTqQFoAD6lAWIQhBup0G5DKEnnedQznULwpXeM53ildQwBSjApUleV6KlRh7yhXAgAARFZ%2BRBb8nzpcUZRpZFmXTYlgJtuCBWdAcUCrLw%2FR8N4lUkBh00Lv0AA%2BcAAF5hKsVQAHzjZ03RwAADC9EFXZxlWENNwCmE9X0jDp%2BlOeMql0usGT8MALVGFYGgeAcRwnA87jqR4hlBro8xlkknRE3AEBYBJ8GABfkdxlGWgCX5KBgMg04YwxiqbScX2C3fo8rSRvJUQQ4Y6Eox4dyE8TXTqMq7NcRqxbfl9DqOj5Vk1RLIws5MsYTvpsuPMsqww5scBohiJAwNiGRWIMwrUwhOE7iJGnULOSDi8Tsu0EAA
+[solution]: https://live.lean-lang.org/#project=mathlib-stable&codez=JYWwDg9gTgLgBAWQIYwBYBtgCMB0AVJAYxmEJwFUBnAUwChRJZEUNt8iSyAlYAOwHNatAPQBaAIRwAxHACMOOAGFUECDThI4Ad2Axe1SpW27UcAAYBXGmbijhQ0aLgAZakl5wobgCZHAwEQaRoA4BGjUXnDUAB7AlDCUgLgEOLRRSODo1HAAXHABIFlwAJK8MAA0cgCscAC8cJUAVHB5mTVYAJ60cHBWGQDMHZ58grSOcADqqKSmfDDU%2FGGNSADWBnIALNVwAOxwDYtwMFAW1AD8yZGpYOn5AXvZRaVrG9u7WS3tnd1wAEz9UINCYkkMi%2BCgAyhYsLFdBYZsY0OYoFobHYHE4AIJwABm0C0SCg3k81C0f1hXkuRBWoTg6Ux8EowG8GQgmLgph08N0Rj%2B%2FFQdIZ1CSKTSGQAFJE4K18vcAJRwEWmbLimqtWXZL47OBK74ayXNOBtX5aOAAbVQAF1UWMJoRTNQAI4WJCYGCS9JxCUQCyE8mEDKaPj0xlwAAcGs0AGotqchZdRZpboVirL5QnNDVnnBFqqQ2G4JHtjVQw0RRms3mtq99e9PEbTYsLSIJNI4D0FMpqIQ9lSnXMsFBNOzTGY%2FgJkfZhk4R%2Fw4DaO4sjGgUPqIPDAys8RkqZRUhlIOhWrwICBgE7BedhXLxXck%2FlxZH1ZGehs77VKwbOlPLQBRSLkvj7VAMkxDhoBiFBgAgXgylCDxZ07OBdAQjxXHcM8LiuEUExlfIn2LepM1lSNKhqfCRVwzNy1kVU3l%2Bf5GyBOBVgUAAFGEAM3VAvE3DhSAXCA5lCKBbHHEZmLJDcCR7ag%2ByQBQ8AmIwYnYiIHSdXRJV4HcCViagwDgDwsGodAIC0JIwD%2BAA3FAOOoaBqDyHS9JFDxsgAORQVV%2Bk6EVQ2vGBZQAPTlDxIyo2w5A2Is5R8qUbyCjwnDC%2FM32rRETUgLQAH1KAsQhCAtD86NCOyHOoCzqF4TLvAs7xMuoYAeRgTKMuyiFMsgjJMi8uBAAAifT8nch4blih4Yr8wL%2BsSp4NVuGjOmmKAIH0%2Fo%2BG8XKSEg%2FrB36AAfOAAC8wiWqoAD5uo%2BdQAAZzoGARdrgHK8v64BTFOm6RnkpTzN0iTqT4DJ%2BGAcqjCsDQPGmWZ5j2dxJI8e1HWdSVUEWJJOjRuAICwGAkH%2FQAL8kWMpkcAS%2FJKxem7PiivZQputLjUc%2FSCvRmsTWRxn0c%2FIA

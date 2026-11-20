@@ -1,0 +1,17 @@
+{
+  "name": "U-Maths Lean induction",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "remoteUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": ["leanprover.lean4"],
+      "settings": {
+        "editor.fontSize": 17
+      }
+    },
+    "codespaces": {
+      "openFiles": ["InductionStarter.lean"]
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/setup-lean.sh"
+}

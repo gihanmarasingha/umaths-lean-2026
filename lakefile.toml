@@ -1,0 +1,5 @@
+name = "umaths_induction"
+defaultTargets = ["InductionSolution"]
+
+[[lean_lib]]
+name = "InductionSolution"

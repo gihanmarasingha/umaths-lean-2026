@@ -1,6 +1,8 @@
 import Mathlib.Tactic.Use
 import Mathlib.Tactic.Ring
 
+set_option linter.unusedTactic false
+
 /-! # 1. Choose a witness with `use` -/
 
 -- Lean reads ∃ as “there exists”.
@@ -35,23 +37,64 @@ example (k : Int) : 3 * (5 * k) + 5 = 5 * (3 * k + 1) := by
 
 /-! # 4. Put the three tactics together -/
 
--- Prepared algebra. This is the equality named step n below.
-private theorem step (n : Nat) :
-    (8 : Int) ^ (n + 1) - 1 = 8 * ((8 : Int) ^ n - 1) + 7 := by
-  rw [pow_succ]
-  ring
-
-theorem seven_dvd_eight_pow_sub_one :
-    ∀ n : Nat, ∃ k : Int, (8 : Int) ^ n - 1 = 7 * k := by
-  intro n
+theorem seven_dvd_eight_pow_sub_one (n : ℕ) :
+  ∃ k : Int, (8 : Int) ^ n - 1 = 7 * k := by
   induction n with
   | zero =>
       use 0
       ring
   | succ n ih =>
-      -- This prepared line gives us an integer k and an equality hk.
-      obtain ⟨k, hk⟩ := ih
-      use 8 * k + 1
-      rw [step n]
-      rw [hk]
+      -- This prepared line gives us an integer m and an equality hm.
+      obtain ⟨m, hm⟩ := ih
+      -- In the line below, replace the right side of the equation with an expression that can be
+      -- written in terms of the left hand side of the equation in the induction hypothesis `hm`
+      -- Use an appropriate tactic to replace the final `sorry`.
+      have h : (8 ^ (n + 1) - 1 : ℤ) = (8 ^ n - 1) * 8 + 7 := by ring
+      -- Complete the proof using `rw [h, hm]`. Then choose an appropriate value of `k` via the
+      -- `use` tactic. You will be left with an algebraic problem. Choose an appropriate tactic
+      -- to perform the algebra.
+      rw [h, hm]
+      use 8 * m + 1
       ring
+  done
+
+/-! # 5. Another induction example
+
+Suppose we have a sequence `u(0)=1` and `u(n+1)=3u(n)+4`.
+
+
+Pupil tasks:
+
+* Generate the values `u(n)` for `n = 0, ..., 4`.
+* Try to guess a formula for `u(n)` in terms of `n`.
+* Having guessed (or given help to guess) a formula `u(n) = 3^(n+1) - 2`, the next task is to try
+  a "by hand" inductive proof.
+* Then produce a Lean proof.
+-/
+
+-- The following is the Lean definition of the sequence.
+def u (n : ℕ) : Nat :=
+  match n with
+  | 0 => 1
+  | n + 1 => 3 * (u n) + 4
+
+-- Here we compute the values of `u(n)` for `0 ≤ n < 5`.
+#eval List.map (λ x => u x) (List.range 5)
+
+-- Now we prove our formula for `u(n)`.
+theorem u_formula (n : ℕ) :
+   u n = (3 ^ (n + 1) - 2 : Int) := by
+  induction n with
+  | zero =>
+      unfold u
+      -- replace the `sorry` below with one tactic to prove the result.
+      ring
+  | succ n ih =>
+      unfold u
+      -- The technical line below is needed so that Lean can recognise `u(n)` as an integer before
+      -- applying the induction hypothesis.
+      change 3 * (u n : ℤ) + 4 = 3 ^ (n + 1 + 1) - 2
+      -- You will need two lines to finish the proof.
+      rw [ih]
+      ring
+  done

@@ -34,7 +34,27 @@ example (x : Int) : x + 2 + 3 = x + 5 := by
 example (k : Int) : 3 * (5 * k) + 5 = 5 * (3 * k + 1) := by
   sorry
 
-/-! # 4. Put the three tactics together -/
+/-! #4. Introducing auxiliary results with `have`
+
+In the example below, we want to use the hypothesis `h : 2 * (x ^ 2) = 5 * y` to rewrite the
+target `6 * x ^ 3 = 15 * x * y`. But `2 * (x ^ 2)` does not appear in the target!
+
+The `have` tactic permits us to introduce a new hypothesis into the context (as long as we prove
+the hypothesis).
+-/
+
+example (x y : Int) (h : 2 * (x ^ 2) = 5 * y)  :  6 * x ^ 3 = 15 * x * y := by
+  have h2 : 6 * x ^ 3 = 3 * x * (2 * (x ^ 2)) := by ring
+  rw [h2]
+  rw [h]
+  ring
+
+-- Complete the proof below using one application of `have` and two applications of `rw`
+
+example (x y : Int) (h : x - 1 = y + 3) : (x ^ 2 - 1) = (x + 1) * (y + 3) := by
+  sorry
+
+/-! # 5. Combine the tactics to prove a divisibility result -/
 
 theorem seven_dvd_eight_pow_sub_one (n : ℕ) :
   ∃ k : Int, (8 : Int) ^ n - 1 = 7 * k := by
@@ -55,7 +75,7 @@ theorem seven_dvd_eight_pow_sub_one (n : ℕ) :
       sorry
   done
 
-/-! # 5. Another induction example
+/-! # 6. Another induction example
 
 Suppose we have a sequence `u(0)=1` and `u(n+1)=3u(n)+4`.
 

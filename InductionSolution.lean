@@ -18,7 +18,9 @@ example : ∃ k : Int, 14 = 7 * k := by
 /-! # 2. Substitute with `rw` -/
 
 -- A forward rewrite replaces the left side of h with its right side.
-example (x y : Int) (h : x = y) : 2 * x = 2 * y := by
+-- Note the syntax of `rw`. We give it the _name_ of the hypothesis rather than the
+-- expression `x = y` that we rewrite with.
+example (x y : Int) (h : x = y) : 2 * x = 3 * y := by
   rw [h]
 
 -- Which equality lets you replace a inside 8 * a + 7?
@@ -35,7 +37,29 @@ example (x : Int) : x + 2 + 3 = x + 5 := by
 example (k : Int) : 3 * (5 * k) + 5 = 5 * (3 * k + 1) := by
   ring
 
-/-! # 4. Put the three tactics together -/
+/-! #4. Introducing auxiliary results with `have`
+
+In the example below, we want to use the hypothesis `h : 2 * (x ^ 2) = 5 * y` to rewrite the
+target `6 * x ^ 3 = 15 * x * y`. But `2 * (x ^ 2)` does not appear in the target!
+
+The `have` tactic permits us to introduce a new hypothesis into the context (as long as we prove
+the hypothesis).
+-/
+
+example (x y : Int) (h : 2 * (x ^ 2) = 5 * y)  :  6 * x ^ 3 = 15 * x * y := by
+  have h2 : 6 * x ^ 3 = 3 * x * (2 * (x ^ 2)) := by ring
+  rw [h2]
+  rw [h]
+  ring
+
+-- Complete the proof below
+
+example (x y : Int) (h : x - 1 = y + 3) : (x ^ 2 - 1) = (x + 1) * (y + 3) := by
+  have h2 : x ^ 2 - 1 = (x + 1) * (x - 1) := by ring
+  rw [h2]
+  rw [h]
+
+/-! # 5. Combine the tactics to prove a divisibility result -/
 
 theorem seven_dvd_eight_pow_sub_one (n : ℕ) :
   ∃ k : Int, (8 : Int) ^ n - 1 = 7 * k := by
@@ -58,7 +82,7 @@ theorem seven_dvd_eight_pow_sub_one (n : ℕ) :
       ring
   done
 
-/-! # 5. Another induction example
+/-! # 6. Another induction example
 
 Suppose we have a sequence `u(0)=1` and `u(n+1)=3u(n)+4`.
 

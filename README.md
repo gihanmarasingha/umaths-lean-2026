@@ -52,7 +52,7 @@ lake env lean InductionStarter.lean  # Expected: four declarations use sorry
 lake env lean Warmup.lean
 ```
 
-[codespaces]: https://codespaces.new/gihanmarasingha/umaths-lean-2026/tree/codex/lean-scaffolding
+[codespaces]: https://codespaces.new/gihanmarasingha/umaths-lean-2026/
 [starter]: https://live.lean-lang.org/#project=mathlib-stable&url=https%3A%2F%2Fgithub.com%2Fgihanmarasingha%2Fumaths-lean-2026%2Fblob%2Fmain%2FInductionStarter.lean
-[solution]: https://codespaces.new/gihanmarasingha/umaths-lean-2026/tree/codex/lean-scaffolding
+[solution]: https://codespaces.new/gihanmarasingha/umaths-lean-2026/
 [starter]: https://live.lean-lang.org/#project=mathlib-stable&url=https%3A%2F%2Fgithub.com%2Fgihanmarasingha%2Fumaths-lean-2026%2Fblob%2Fmain%2FInductionSolution.lean
